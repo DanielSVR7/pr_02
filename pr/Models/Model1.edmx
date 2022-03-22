@@ -41,6 +41,15 @@
           <Property Name="GenderID" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="GPA" Type="real" />
         </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="16" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Groups_Specialties">
           <End Role="Specialties" Type="Self.Specialties" Multiplicity="1" />
           <End Role="Groups" Type="Self.Groups" Multiplicity="*" />
@@ -82,6 +91,7 @@
           <EntitySet Name="Groups" EntityType="Self.Groups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specialties" EntityType="Self.Specialties" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Groups_Specialties" Association="Self.FK_Groups_Specialties">
             <End Role="Specialties" EntitySet="Specialties" />
             <End Role="Groups" EntitySet="Groups" />
@@ -142,6 +152,15 @@
           <NavigationProperty Name="Gender" Relationship="Self.FK_Students_Genders" FromRole="Students" ToRole="Genders" />
           <NavigationProperty Name="Group" Relationship="Self.FK_Students_Groups" FromRole="Students" ToRole="Groups" />
         </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Students_Genders">
           <End Role="Genders" Type="Self.Gender" Multiplicity="1" />
           <End Role="Students" Type="Self.Student" Multiplicity="*" />
@@ -183,6 +202,7 @@
           <EntitySet Name="Groups" EntityType="Self.Group" />
           <EntitySet Name="Specialties" EntityType="Self.Specialty" />
           <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="Users" EntityType="Self.User" />
           <AssociationSet Name="FK_Students_Genders" Association="Self.FK_Students_Genders">
             <End Role="Genders" EntitySet="Genders" />
             <End Role="Students" EntitySet="Students" />
@@ -239,6 +259,16 @@
                 <ScalarProperty Name="GroupID" ColumnName="GroupID" />
                 <ScalarProperty Name="GenderID" ColumnName="GenderID" />
                 <ScalarProperty Name="GPA" ColumnName="GPA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CollegeModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

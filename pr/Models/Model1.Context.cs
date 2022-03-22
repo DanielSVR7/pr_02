@@ -29,5 +29,6 @@ namespace pr.Models
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Specialty> Specialties { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

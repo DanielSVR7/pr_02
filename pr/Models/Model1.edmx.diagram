@@ -4,11 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0eb35b58af0547c9a901593129b12f7d" Name="Diagram1">
+      <Diagram DiagramId="7d7f93e3f44e4023ae29099aefd49116" Name="Diagram1">
         <EntityTypeShape EntityType="CollegeModel.Gender" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="CollegeModel.Group" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CollegeModel.Specialty" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CollegeModel.Student" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="CollegeModel.User" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
         <AssociationConnector Association="CollegeModel.FK_Students_Genders" ManuallyRouted="false" />
         <AssociationConnector Association="CollegeModel.FK_Groups_Specialties" ManuallyRouted="false" />
         <AssociationConnector Association="CollegeModel.FK_Students_Groups" ManuallyRouted="false" />

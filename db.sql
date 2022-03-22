@@ -9,6 +9,20 @@ GO
 
 use College;
 
+	/*** Создание таблицы Users ***/
+IF EXISTS (SELECT * FROM sys.tables WHERE NAME = 'Users')
+	DROP TABLE Users;						
+GO
+CREATE TABLE Users
+(	UserID          INT             NOT NULL IDENTITY,	
+    FullName        NVARCHAR(150)   NOT NULL,
+    Login           NVARCHAR(16)    NOT NULL,     
+    Password        NVARCHAR(16)    NOT NULL,
+	CONSTRAINT PK_Users
+		PRIMARY KEY (UserID)
+);
+GO
+
 	/*** Создание таблицы Specialties ***/
 IF EXISTS (SELECT * FROM sys.tables WHERE NAME = 'Specialties')
 	DROP TABLE Specialties;						
@@ -114,7 +128,27 @@ VALUES
     ('54.02.01', '913'),
     ('54.02.01', '921'),
     ('54.02.01', '922'),
-    ('54.02.01', '923');
+    ('54.02.01', '923'),
+    
+    ('42.02.01', '911'),
+    ('42.02.01', '912'),
+    
+
+    ('15.02.12', '911'),
+    ('15.02.12', '912'),
+    ('42.02.01', '921'),
+
+    ('20.02.02', '911'),
+    ('20.02.02', '912'),
+    ('20.02.02', '921'),
+    ('20.02.02', '922'),
+
+    ('15.02.14', '911'),
+    ('15.02.14', '921'),
+
+    ('20.02.04', '911'),
+    ('20.02.04', '912'),
+    ('20.02.04', '913');
 GO
 
 INSERT INTO Genders (GenderID, GenderName)
