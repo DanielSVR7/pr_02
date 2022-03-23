@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:pr.Views"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1250"
-        DataContext="local:MainWindow">
+        Title="MainWindow" Height="700" Width="1350">
     <Window.Resources>
         <Style TargetType="ListBox">
             <Setter Property="BorderThickness" Value="0"/>
@@ -33,11 +32,11 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3.5*"/>
         </Grid.ColumnDefinitions>
         <GroupBox Grid.Column="0" Header="Специальности">
             <DockPanel>
-                <UniformGrid Rows="1" DockPanel.Dock="Bottom">
+                <UniformGrid Rows="1" DockPanel.Dock="Bottom" Margin="0,5">
                     <Button x:Name="AddSpecialtyButton" Width="60" Height="30">
                         <Button.Content>
                             <fa:ImageAwesome Icon="Solid_PlusSquare" Width="15"/>
@@ -59,7 +58,7 @@
         </GroupBox>
         <GroupBox Grid.Column="1" Header="Группы">
             <DockPanel>
-                <UniformGrid Rows="1" DockPanel.Dock="Bottom">
+                <UniformGrid Rows="1" DockPanel.Dock="Bottom" Margin="0,5">
                     <Button x:Name="AddGroupButton" Width="40" Height="30">
                         <Button.Content>
                             <fa:ImageAwesome Icon="Solid_PlusSquare" Width="15"/>
@@ -80,13 +79,20 @@
             </DockPanel>
         </GroupBox>
         <GroupBox Grid.Column="2" Header="Студенты">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="0.1*"/>
-                </Grid.ColumnDefinitions>
+            <DockPanel>
+                <UniformGrid Rows="1" DockPanel.Dock="Bottom" Margin="150,5">
+                    <Button x:Name="SaveStudentsButton" Margin="80,0" Height="30" Click="SaveStudentsButton_Click">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Regular_Save" Margin="5"/>
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="DeleteStudentButton" Margin="80,0" Height="30" Click="DeleteStudentButton_Click">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Regular_TrashAlt" Margin="5"/>
+                        </Button.Content>
+                    </Button>
+                </UniformGrid>
                 <DataGrid x:Name="StudentsDataGrid" 
-                      Grid.Column="0"
                       AutoGenerateColumns="False"
                       CanUserAddRows="True"
                       CanUserResizeRows="False"
@@ -99,10 +105,37 @@
                       Background="White"
                       BorderThickness="0">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Фото" Width="0.4*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding PhotoPath}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical">
+                                        <Image Source="{Binding PhotoPath}"/>
+                                        <Button Content="Загрузить"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="1*"/>
                         <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="0.7*"/>
                         <DataGridTextColumn Header="Отчество" Binding="{Binding LastName}" Width="1*"/>
-                        <DataGridTextColumn Header="Пол" Binding="{Binding Gender.GenderName}" Width="0.6*"/>
+                        <DataGridTemplateColumn Header="Пол" Width="0.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Gender.GenderName}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Genders, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                              SelectedItem="{Binding Gender}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Дата рождения" Width="0.8*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -118,19 +151,7 @@
                         <DataGridTextColumn Header="Средний балл" Binding="{Binding GPA}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <UniformGrid Columns="1" Grid.Column="1" Margin="0,80">
-                    <Button x:Name="SaveStudentsButton" Margin="10" Height="50">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Regular_Save" Margin="5"/>
-                        </Button.Content>
-                    </Button>
-                    <Button x:Name="DeleteStudentButton" Margin="10" Height="50">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Regular_TrashAlt" Margin="5"/>
-                        </Button.Content>
-                    </Button>
-                </UniformGrid>
-            </Grid>
+            </DockPanel>
         </GroupBox>
     </Grid>
 </Window>

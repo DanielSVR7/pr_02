@@ -40,6 +40,7 @@
           <Property Name="GroupID" Type="int" Nullable="false" />
           <Property Name="GenderID" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="GPA" Type="real" />
+          <Property Name="PhotoPath" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -149,6 +150,7 @@
           <Property Name="GroupID" Type="Int32" Nullable="false" />
           <Property Name="GenderID" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="GPA" Type="Single" />
+          <Property Name="PhotoPath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Gender" Relationship="Self.FK_Students_Genders" FromRole="Students" ToRole="Genders" />
           <NavigationProperty Name="Group" Relationship="Self.FK_Students_Groups" FromRole="Students" ToRole="Groups" />
         </EntityType>
@@ -259,6 +261,7 @@
                 <ScalarProperty Name="GroupID" ColumnName="GroupID" />
                 <ScalarProperty Name="GenderID" ColumnName="GenderID" />
                 <ScalarProperty Name="GPA" ColumnName="GPA" />
+                <ScalarProperty Name="PhotoPath" ColumnName="PhotoPath" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -22,6 +22,7 @@ namespace pr.Models
         public int GroupID { get; set; }
         public string GenderID { get; set; }
         public Nullable<float> GPA { get; set; }
+        public string PhotoPath { get; set; }
     
         public virtual Gender Gender { get; set; }
         public virtual Group Group { get; set; }

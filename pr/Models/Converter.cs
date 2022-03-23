@@ -20,4 +20,11 @@ namespace pr.Models
             return Specialty.SpecialtyReduction + '-' + GroupNumber;
         }
     }
+    partial class Gender
+    {
+        public override string ToString()
+        {
+            return GenderName;
+        }
+    }
 }

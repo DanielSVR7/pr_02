@@ -1,7 +1,10 @@
 ﻿using pr.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,14 +20,16 @@ namespace pr.Views
 {
     public partial class MainWindow : Window
     {
+        public ObservableCollection<Gender> Genders { get; }
         CollegeEntities db = new CollegeEntities();
         Group SelectedGroup = null;
-        String fuck { get; set; }
         Specialty SelectedSpecialty = null;
+
         public MainWindow()
         {
-            DataContext = this;
             InitializeComponent();
+            Genders = new ObservableCollection<Gender>(db.Genders.ToList());
+            DataContext = this;
             ChangeSpecialtiesButtonsVisibility(false);
             ChangeGroupsButtonsVisibility(false);
             Start();
@@ -95,6 +100,8 @@ namespace pr.Views
                 DeleteGroupButton.Visibility = Visibility.Collapsed;
             }
         }
+        
+        #region Обработчики событий
         private void SpecialtiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ChangeSpecialty();
@@ -103,6 +110,18 @@ namespace pr.Views
         private void GroupsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ChangeGroup();
+        }
+
+        #endregion
+
+        private void SaveStudentsButton_Click(object sender, RoutedEventArgs e)
+        {
+            db.SaveChanges();
+        }
+
+        private void DeleteStudentButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
