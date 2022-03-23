@@ -1,4 +1,5 @@
-﻿using pr.Models;
+﻿using Microsoft.Win32;
+using pr.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -101,6 +102,52 @@ namespace pr.Views
             }
         }
         
+        private void SaveStudentsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                db.SaveChanges();
+                MessageBox.Show("Данные успешно сохранены.", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), ex.Message, MessageBoxButton.OK, MessageBoxImage.Error); 
+            }
+        }
+
+        private void DeleteStudentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedStudent = StudentsDataGrid.SelectedItem as Student;
+            if (selectedStudent != null)
+            {
+                if (MessageBox.Show(
+                    "Вы действительно хотите удалить запись о студенте " + selectedStudent.Surname + ' ' + selectedStudent.FirstName + '?',
+                    "Подтвердите действие",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning
+                    ) == MessageBoxResult.No) return;
+                else
+                {
+                    db.Students.Remove(selectedStudent);
+                    db.SaveChanges();
+                    ChangeGroup();
+                }
+            }
+        }
+
+
+        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedStudent = StudentsDataGrid.SelectedItem as Student;
+                OpenFileDialog openDialog = new OpenFileDialog();
+                openDialog.Filter = "Файлы изображений|*.bmp;*.png;*.jpg";
+                if (openDialog.ShowDialog() != true)
+                    return;
+                string path = openDialog.FileName;
+                selectedStudent.PhotoPath = path;
+                ChangeGroup();
+            
+            
+        }
         #region Обработчики событий
         private void SpecialtiesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -113,15 +160,6 @@ namespace pr.Views
         }
 
         #endregion
-
-        private void SaveStudentsButton_Click(object sender, RoutedEventArgs e)
-        {
-            db.SaveChanges();
-        }
-
-        private void DeleteStudentButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
+

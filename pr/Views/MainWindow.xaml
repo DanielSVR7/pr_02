@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:pr.Views"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
@@ -105,17 +106,17 @@
                       Background="White"
                       BorderThickness="0">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Фото" Width="0.4*">
+                        <DataGridTemplateColumn Header="Фото" Width="0.5*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding PhotoPath}"/>
+                                    <Image Source="{Binding PhotoPath, TargetNullValue={x:Null}}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <Image Source="{Binding PhotoPath}"/>
-                                        <Button Content="Загрузить"/>
+                                        <Image Source="{Binding PhotoPath, TargetNullValue={x:Null}}"/>
+                                        <Button x:Name="LoadImageButton" Content="Загрузить" Click="LoadImageButton_Click"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
