@@ -11,13 +11,14 @@ namespace pr.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Collections.ObjectModel;
+
     public partial class Specialty
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Specialty()
         {
-            this.Groups = new HashSet<Group>();
+            this.Groups = new ObservableCollection<Group>();
         }
     
         public string SpecialtyCode { get; set; }
@@ -25,6 +26,6 @@ namespace pr.Models
         public string SpecialtyReduction { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Group> Groups { get; set; }
+        public virtual ObservableCollection<Group> Groups { get; set; }
     }
 }

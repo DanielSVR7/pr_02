@@ -88,9 +88,14 @@ CREATE TABLE Students
     CONSTRAINT FK_Students_Groups
         FOREIGN KEY (GroupID)
             REFERENCES Groups (GroupID)
+                ON DELETE CASCADE
 );
 GO
 
+INSERT INTO Users(FullName, Login, Password)
+VALUES
+    ('Свириденко Д.Д.', '1', '1'),
+    ('Иванов И.И.', '123', '123');
 
 INSERT INTO Specialties (SpecialtyCode, SpecialtyName, SpecialtyReduction) 
 VALUES 
