@@ -20,10 +20,8 @@ namespace pr.ViewModels
         #region Коллекции
 
         private ObservableCollection<Specialty> _Specialties;
-        private ObservableCollection<Student> _Students;
         private ObservableCollection<Gender> _Genders;
         public ObservableCollection<Specialty> Specialties { get => _Specialties; set => Set(ref _Specialties, value); }
-        public ObservableCollection<Student> Students { get => _Students; set => Set(ref _Students, value); }
         public ObservableCollection<Gender> Genders { get => _Genders; set => Set(ref _Genders, value); }
         #endregion
 
@@ -33,6 +31,12 @@ namespace pr.ViewModels
         public Specialty SelectedSpecialty { get => _SelectedSpecialty; set => Set(ref _SelectedSpecialty, value); }
         public Group SelectedGroup { get => _SelectedGroup; set => Set(ref _SelectedGroup, value); }
         public Student SelectedStudent { get => _SelectedStudent; set => Set(ref _SelectedStudent, value); }
+
+        private List<float> _GPAFilter = new List<float>() { 2, 3, 4 };
+        public List<float> GPAFilter { get => _GPAFilter; set => Set(ref _GPAFilter, value); }
+
+        private int _NumberOfFilteredStudents;
+        public int NumberOfFilteredStudents { get => _NumberOfFilteredStudents; set => Set(ref _NumberOfFilteredStudents, value); }
         public MainWindowViewModel()
         {
             #region Комманды 
@@ -46,7 +50,6 @@ namespace pr.ViewModels
 
             Specialties = new ObservableCollection<Specialty>(db.Specialties.ToList());
             Genders = new ObservableCollection<Gender>(db.Genders.ToList());
-            Students = new ObservableCollection<Student>(db.Students.ToList());
 
         }
         #region AddGroupCommand
@@ -114,7 +117,7 @@ namespace pr.ViewModels
         public ICommand LoadImageCommand { get; }
         private bool CanLoadImageCommandExecute(object p)
         {
-            if (p is Student student && Students.Contains(student))
+            if (p is Student student && SelectedGroup.Students.Contains(student))
                 return true;
             else return false;
         }
@@ -127,7 +130,7 @@ namespace pr.ViewModels
                 return;
             string path = openDialog.FileName;
             student.PhotoPath = path;
-            Students = new ObservableCollection<Student>(db.Students.ToList());
+            Specialties = new ObservableCollection<Specialty>(db.Specialties.ToList());
         }
         #endregion
 
@@ -141,11 +144,19 @@ namespace pr.ViewModels
         }
         private void OnSaveStudentsCommandExecuted(object p)
         {
-            db.SaveChanges();
-            Students = new ObservableCollection<Student>(db.Students.ToList());
-            MessageBox.Show(
-                "Внесенные изменения успешно сохранены", "Успешное сохранение",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                db.SaveChanges();
+                Specialties = new ObservableCollection<Specialty>(db.Specialties.ToList());
+                MessageBox.Show(
+                    "Внесенные изменения успешно сохранены", "Успешное сохранение",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch
+            {
+                MessageBox.Show("Заполните все обязательные поля", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 
@@ -153,7 +164,7 @@ namespace pr.ViewModels
         public ICommand DeleteStudentCommand { get; }
         private bool CanDeleteStudentCommandExecute(object p)
         {
-            if (p is Student student && Students.Contains(student))
+            if (p is Student student && SelectedGroup.Students.Contains(student))
                 return true;
             else return false;
         }
@@ -166,16 +177,8 @@ namespace pr.ViewModels
             if (result == MessageBoxResult.No) return;
             else
             {
-                int student_index = Students.IndexOf(student);
                 db.Students.Remove(student);
-                Students.Remove(student);
                 db.SaveChanges();
-                if (SelectedGroup.Students.Count == 0)
-                    return;
-                if (student_index > 0)
-                    SelectedStudent = Students[student_index - 1];
-                else
-                    SelectedStudent = Students[student_index];
             }
         }
         #endregion

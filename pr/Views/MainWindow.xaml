@@ -12,6 +12,14 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="DarkSlateGray"/>
+            <Setter Property="FontWeight" Value="Regular"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
         <Style TargetType="ListBox">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
@@ -32,149 +40,189 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
-        <GroupBox Grid.Column="0" Header="Специальности" Grid.Row="1">
-            <DockPanel>
-                <StackPanel>
-                    <TextBlock Text="Поиск по специальности" Margin="5"/>
-                    <TextBox  Margin="10,0"/>
-                    <ListBox ItemsSource="{Binding Specialties}" SelectedItem="{Binding SelectedSpecialty}"/>
-                </StackPanel>
-                
-            </DockPanel>
-        </GroupBox>
-        <GroupBox Grid.Column="1" Header="Группы" Grid.Row="1">
-            <DockPanel>
-                <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
-                    <UniformGrid Columns="3" Margin="40,0">
-                        <TextBlock Text="{Binding SelectedSpecialty.SpecialtyReduction}" FontSize="16"/>
-                        <TextBlock Text="—" FontSize="16" Width="10"/>
-                        <TextBox Text="{Binding SelectedGroup.GroupNumber, UpdateSourceTrigger=PropertyChanged}" Height="25" FontSize="16" />
+    <DockPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Header="Специальности">
+                <DockPanel>
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <CollectionViewSource x:Key="SpecialtiesCollection" 
+                                              Source="{Binding Specialties}"
+                                              Filter="SpecialtiesCollection_Filter"/>
+                        </StackPanel.Resources>
+                        <TextBlock Text="Поиск по специальности" Margin="5"/>
+                        <TextBox x:Name="SpecialtiesFilterTextBox" Margin="10,0" 
+                             TextChanged="SpecialtiesFilterTextBox_TextChanged"/>
+                        <ListBox ItemsSource="{Binding Source={StaticResource SpecialtiesCollection}}" 
+                             SelectedItem="{Binding SelectedSpecialty}" />
+                    </StackPanel>
+
+                </DockPanel>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="Группы">
+                <DockPanel>
+                    <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
+                        <UniformGrid Columns="3" Margin="40,0">
+                            <TextBlock Text="{Binding SelectedSpecialty.SpecialtyReduction}" FontSize="16"/>
+                            <TextBlock Text="—" FontSize="16" Width="10"/>
+                            <TextBox Text="{Binding SelectedGroup.GroupNumber, UpdateSourceTrigger=PropertyChanged}" 
+                                 Height="25" FontSize="16" />
+                        </UniformGrid>
+                        <UniformGrid Rows="1" Margin="0,5">
+                            <Button Command="{Binding AddGroupCommand}" Width="40" Height="30">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_PlusSquare" Width="15"/>
+                                </Button.Content>
+                            </Button>
+                            <Button Command="{Binding SaveGroupCommand}" Width="40" Height="30">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_Save" Width="15"/>
+                                </Button.Content>
+                            </Button>
+                            <Button Command="{Binding DeleteGroupCommand}" Width="40" Height="30">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_Trash" Width="15"/>
+                                </Button.Content>
+                            </Button>
+                        </UniformGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="0">
+                        <StackPanel.Resources>
+                            <CollectionViewSource x:Key="GroupsCollection" 
+                                              Source="{Binding SelectedSpecialty.Groups}"
+                                              Filter="GroupsCollection_Filter"/>
+                        </StackPanel.Resources>
+                        <TextBlock Text="Поиск по группе" Margin="5"/>
+                        <TextBox x:Name="GroupsFilterTextBox" Margin="10,0" 
+                             TextChanged="GroupsFilterTextBox_TextChanged"/>
+                        <ListBox ItemsSource="{Binding Source={StaticResource ResourceKey=GroupsCollection}}" 
+                             SelectedItem="{Binding SelectedGroup}"/>
+                    </StackPanel>
+                </DockPanel>
+            </GroupBox>
+            <GroupBox Grid.Column="2" Header="Студенты">
+                <DockPanel>
+                    <UniformGrid Rows="1" DockPanel.Dock="Bottom" Margin="150,5">
+                        <Button Command="{Binding SaveStudentsCommand}"  Margin="80,0" Height="30">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="Regular_Save" Margin="5"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Command="{Binding DeleteStudentCommand}" 
+                            CommandParameter="{Binding SelectedStudent}" 
+                            Margin="80,0" Height="30">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="Regular_TrashAlt" Margin="5"/>
+                            </Button.Content>
+                        </Button>
                     </UniformGrid>
-                    <UniformGrid Rows="1" Margin="0,5">
-                        <Button Command="{Binding AddGroupCommand}" Width="40" Height="30">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="Solid_PlusSquare" Width="15"/>
-                            </Button.Content>
-                        </Button>
-                        <Button Command="{Binding SaveGroupCommand}" Width="40" Height="30">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="Solid_Save" Width="15"/>
-                            </Button.Content>
-                        </Button>
-                        <Button Command="{Binding DeleteGroupCommand}" Width="40" Height="30">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="Solid_Trash" Width="15"/>
-                            </Button.Content>
-                        </Button>
-                    </UniformGrid>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="0">
-                    <TextBlock Text="Поиск по группе" Margin="5"/>
-                    <TextBox  Margin="10,0"/>
-                    <ListBox ItemsSource="{Binding SelectedSpecialty.Groups}" SelectedItem="{Binding SelectedGroup}"/>
-                </StackPanel>
-            </DockPanel>
-        </GroupBox>
-        <GroupBox Grid.Column="2" Header="Студенты" Grid.ColumnSpan="3" Grid.Row="1">
-            <DockPanel>
-                <UniformGrid Rows="1" DockPanel.Dock="Bottom" Margin="150,5">
-                    <Button Command="{Binding SaveStudentsCommand}" Margin="80,0" Height="30">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Regular_Save" Margin="5"/>
-                        </Button.Content>
-                    </Button>
-                    <Button Command="{Binding DeleteStudentCommand}" CommandParameter="{Binding SelectedStudent}" Margin="80,0" Height="30">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Regular_TrashAlt" Margin="5"/>
-                        </Button.Content>
-                    </Button>
-                </UniformGrid>
-                <StackPanel>
-                    <UniformGrid Columns="3" Margin="0,0,0,10">
-                        <StackPanel>
-                            <TextBlock Text="Поиск по ФИО" Margin="5"/>
-                            <TextBox  Margin="10,0"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="Год рождения" Margin="5"/>
-                            <TextBox  Margin="10,0"/>
-                        </StackPanel>
+                    <Grid>
+                        <Grid.Resources>
+                            <CollectionViewSource x:Key="StudentsCollection"
+                                              Source="{Binding SelectedGroup.Students}"
+                                              Filter="StudentsCollection_Filter"/>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="8*"/>
+                        </Grid.RowDefinitions>
+                        <UniformGrid Columns="3" Margin="0,0,0,10" Grid.Row="0">
+                            <StackPanel>
+                                <TextBlock Text="Поиск студента" Margin="5"/>
+                                <TextBox Name="StudentFilterTextBox" 
+                                         Margin="10,0" 
+                                         TextChanged="StudentFilterTextBox_TextChanged"/>
+                            </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Средний балл" Margin="5"/>
-                            <TextBox  Margin="10,0"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Больше, чем" FontSize="14"/>
+                                <ComboBox x:Name="GPAComboBox" ItemsSource="{Binding GPAFilter}" 
+                                              Margin="10,0" Width="40" SelectionChanged="GPAComboBox_SelectionChanged"/>
+                                    <Button Content="Сброс" Margin="40,0" Click="ResetButton_Click"/>
+                                </StackPanel>
                         </StackPanel>
-                    </UniformGrid>
-
-                    <DataGrid ItemsSource="{Binding SelectedGroup.Students}"
-                          SelectedItem="{Binding SelectedStudent}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="True"
-                          CanUserResizeRows="False"
-                          GridLinesVisibility="All"
-                          VerticalGridLinesBrush="DarkGray"
-                          AlternatingRowBackground="#FFF0F0F0" 
-                          HorizontalGridLinesBrush="LightGray"
-                          SelectionMode="Single"
-                          FontSize="14"
-                          Background="White"
-                          BorderThickness="0">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Фото" Width="0.5*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding PhotoPath, TargetNullValue={x:Null}}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Vertical">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Найдено записей: "/>
+                                    <TextBlock Text="{Binding SelectedGroup.Students.Count}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Из них отображаются: "/>
+                                    <TextBlock x:Name="CountTextBox"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </UniformGrid>
+                        <DataGrid ItemsSource="{Binding Source={StaticResource StudentsCollection}}"
+                                  SelectedItem="{Binding SelectedStudent}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="True"
+                                  CanUserResizeRows="False"
+                                  GridLinesVisibility="All"
+                                  VerticalGridLinesBrush="DarkGray"
+                                  AlternatingRowBackground="#FFF0F0F0" 
+                                  HorizontalGridLinesBrush="LightGray"
+                                  SelectionMode="Single"
+                                  FontSize="14"
+                                  Background="White"
+                                  BorderThickness="0" Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Фото" Width="0.5*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
                                             <Image Source="{Binding PhotoPath, TargetNullValue={x:Null}}"/>
-                                            <Button Command="{Binding DataContext.LoadImageCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                CommandParameter="{Binding DataContext.SelectedStudent, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Vertical">
+                                                <Image Source="{Binding PhotoPath, TargetNullValue={x:Null}}"/>
+                                                <Button Command="{Binding DataContext.LoadImageCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                CommandParameter="{Binding DataContext.SelectedStudent, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
                                                 Content="Загрузить"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="1*"/>
-                            <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="0.7*"/>
-                            <DataGridTextColumn Header="Отчество" Binding="{Binding LastName}" Width="1*"/>
-                            <DataGridTemplateColumn Header="Пол" Width="0.6*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Gender.GenderName}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <ComboBox ItemsSource="{Binding DataContext.Genders, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="1*"/>
+                                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="0.7*"/>
+                                <DataGridTextColumn Header="Отчество" Binding="{Binding LastName}" Width="1*"/>
+                                <DataGridTemplateColumn Header="Пол" Width="0.6*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Gender.GenderName}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding DataContext.Genders, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                               SelectedItem="{Binding Gender}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Дата рождения" Width="0.8*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <DatePicker SelectedDate="{Binding Birthday}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Средний балл" Binding="{Binding GPA}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </DockPanel>
-        </GroupBox>
-    </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Дата рождения" Width="0.8*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <DatePicker SelectedDate="{Binding Birthday}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Средний балл" Binding="{Binding GPA}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </DockPanel>
+            </GroupBox>
+        </Grid>
+    </DockPanel>
 </Window>
